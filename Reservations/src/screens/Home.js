@@ -1,7 +1,8 @@
 import React,{useEffect} from 'react'
-import { View, Text,StyleSheet,TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text,StyleSheet,TouchableOpacity,ScrollView, ActivityIndicator, Alert } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {getListMovie} from '../redux/actions'
+import * as Animatable from 'react-native-animatable';
 
 export default function Home() {
     const dispatch = useDispatch()
@@ -20,18 +21,20 @@ export default function Home() {
         )
     }
     return (
-        <View style={styles.container}>
-            <Text>{movie.movie.description}</Text>
-           {movie.loading && <ActivityIndicator color='white' size='small' />}
-           {movie.movie.movies && movie.movie.movies.map((movie,index)=> renderList(movie,index))}
-        </View>
+        <ScrollView contentContainerStyle = {styles.container}>
+            {movie.loading && <ActivityIndicator color='red' size='small' />}
+          {movie.loading == false  &&
+           <Animatable.View animation="fadeInUp">
+                <Text>{movie.movie.description}</Text>
+                {movie.movie.movies && movie.movie.movies.map((movie,index)=> renderList(movie,index))}
+           </Animatable.View>}
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor:'red',
         justifyContent:'center',
         alignItems:'center'
     },
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 10,
         padding: 10,
+        margin: 5,
         shadowColor: '#000000',
         shadowOffset: {
           width: 0,

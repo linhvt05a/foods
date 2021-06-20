@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { call, put, takeEvery, takeLatest, delay, cancel} from 'redux-saga/effects'
 import {api} from '../../sevices'
 import * as types from '../types'
 
@@ -6,7 +6,10 @@ import * as types from '../types'
 function* fetchMovie(action) {
    try {
       const res = yield call(api.getMovive);
+      yield delay(4000)
       yield put({type: types.GET_MOVIE_SUCCESS, res: res});
+      
+     
    } catch (e) {
       yield put({type: types.GET_MOVIE_FAILURE, message: e.message});
    }
